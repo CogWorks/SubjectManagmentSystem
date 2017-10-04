@@ -1,6 +1,7 @@
 import sqlite3
-import participant_gui
-from tkinter import Tk
+
+
+password = 'testing'
 
 #takes a rin/id tuple and connection ubject
 def add_to_database(rin_id, conn):
@@ -12,6 +13,9 @@ def add_to_database(rin_id, conn):
     c.execute("INSERT INTO rin__testing_id VALUES (?, ?)", (rin_id[0], rin_id[1]))
     conn.commit()
 
+def find_sid(rin, conn):
+    pass
+
 def connect_to_database(db):
     conn = sqlite3.connect(db)
     c = conn.cursor()
@@ -21,9 +25,6 @@ def connect_to_database(db):
         pass
     return conn
 
-#gui startup
-app = participant_gui.App_Gui()
-app.mainloop()
 
 
 #testing

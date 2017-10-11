@@ -12,11 +12,11 @@ def add_to_database(rin_id, conn):
     """
     #check for duplicates
     c = conn.cursor()
-    c.execute("SELECT * FROM rin__sid_id WHERE sid_year_semester=?, side_number=?", rin_id[1][0],rin_id[1][1])
+    c.execute("SELECT * FROM rin__sid_id WHERE sid_year_semester=? AND sid_number=?", (rin_id[1][0],rin_id[1][1]))
     if c.fetchone() != None:
         raise sqlite3.OperationalError("That sid already exists in the database")
 
-    c.execute("INSERT INTO rin__testing_id VALUES (?, ?, ?)", (rin_id[0], rin_id[1][0], rin_id[1][1]))
+    c.execute("INSERT INTO rin__sid_id VALUES (?, ?, ?)", (rin_id[0], rin_id[1][0], rin_id[1][1]))
     conn.commit()
 
 
@@ -50,7 +50,7 @@ def next_sid(conn):
     # find largest number
     c = conn.cursor()
     try:
-        c.execute("SELECT MAX(sid_number) FROM rin__sid_id WHERE sid_year_semester = ?", year_semester)
+        c.execute("SELECT MAX(sid_number) FROM rin__sid_id WHERE sid_year_semester = ?", (year_semester,))
         return (year_semester,c.fetchone()[0])
     except sqlite3.OperationalError as e:
         return (year_semester,0)
@@ -59,7 +59,7 @@ def connect_to_database(db):
     conn = sqlite3.connect(db)
     c = conn.cursor()
     try:
-        c.execute('CREATE TABLE rin__sid_id (rin text unique, sid_year_semester text, side_number int)')
+        c.execute('CREATE TABLE rin__sid_id (rin text unique, sid_year_semester text, sid_number int)')
     except sqlite3.OperationalError as e:
         pass
     return conn

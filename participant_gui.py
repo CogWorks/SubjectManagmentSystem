@@ -37,7 +37,6 @@ class App_Gui(tk.Tk):
         self.pages['sid_found'] = sid_found
         self.setPage('rin_search')
 
-
     def find_number(self, rin, connection):
         self.current_rin = rin
         self.current_sid = participantid.find_sid(self.current_rin, connection)
@@ -49,9 +48,9 @@ class App_Gui(tk.Tk):
         else:
             self.setPage('sid_not_found')
 
-    def generate_number(self, conection):
+    def generate_number(self, connection):
         # add to database
-        participantid.add_to_database((self.current_rin, next_sid(connection)), connection)
+        participantid.add_to_database((self.current_rin, participantid.next_sid(connection)), connection)
 
         # now call find_number
         self.setPage('sid_found')
